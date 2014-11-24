@@ -1,25 +1,16 @@
-# Ember-helpers-render-component
+# ember-helpers-render-component
 
-This README outlines the details of collaborating on this Ember addon.
+Ember Helper that allows you to render a component by specifying the component's name. Any parameters bound to the helper will automatically be bound to the component.
+
+```handlebars
+{{render-component 'async-button' action='save'}}
+```
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
-
-## Running
-
-* `ember server`
-* Visit your app at http://localhost:4200.
+* `npm install --save-dev ember-helpers-render-component`
 
 ## Running Tests
 
 * `ember test`
 * `ember test --server`
-
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
