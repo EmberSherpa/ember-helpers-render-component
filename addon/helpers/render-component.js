@@ -1,14 +1,28 @@
 import Ember from 'ember';
 
-export default function renderComponent(component, options) {
-
-  var helperName;
+/**
+ * @source: Luke Melia's Gist https://gist.github.com/lukemelia/ec6d03802c6a80ac1c99
+ */
+export default function renderComponent(name, options) {
+  var context = (options.contexts && options.contexts.length) ? options.contexts[0] : this;
   if (options.types[0] === "ID") {
-    helperName = Ember.Handlebars.get(this, component);
-  } else {
-    helperName = component;
+    name = Ember.Handlebars.get(context, name, options);
+  }
+  var container = options.data.view.container;
+  var fullName = 'component:' + name;
+  var templateFullName = 'template:components/' + name;
+  var templateRegistered = container && container.has(templateFullName);
+  if (templateRegistered) {
+    container.injection(fullName, 'layout', templateFullName);
+  }
+  var Component = container.lookupFactory(fullName);
+
+  if (templateRegistered && !Component) {
+    container.register(fullName, Ember.Component);
+    Component = container.lookupFactory(fullName);
   }
 
-  var helper = Ember.Handlebars.resolveHelper(options.data.view.container, helperName);
-  return helper.call(this, options);
+  if (Component) {
+    return Ember.Handlebars.helpers.view.call(this, Component, options);
+  }
 }
